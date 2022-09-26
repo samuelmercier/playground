@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+
+function decodeBase64(input) {
+	const decoded=window.atob(input);
+	const result=new Uint8Array(decoded.length);
+	for(let i=0; i<decoded.length; i+=1)
+		result[i]=decoded.charCodeAt(i);
+	return result.buffer;
+}
+
+function encodeBase64(input) {
+	if(input===undefined)
+		return undefined;
+	let encoded="";
+	for(let i=0; i<input.length; i+=1)
+		encoded+=String.fromCharCode(input[i]);
+	return window.btoa(encoded);
+}
+
+async function registerCredentials() {
+try {
+	const cred=await navigator.credentials.create({
+		"publicKey":{
+			"rp":{
+				"name":"smr.dev",
+				"id":"samuelmercier.github.io"
+			},
+			"user":{
+				"displayName":"Samuel Mercier",
+				"id":decodeBase64("MzAwODIyOTgtM2Y2Ni00MjdhLWI0ZmYtNWUxMWI4NDQxY2Zl"), // 30082298-3f66-427a-b4ff-5e11b8441cfe
+				"name":"test"
+			},
+			"challenge":decodeBase64("YTk5NDcwMzUtMmU5Ny00NTdmLTk4OTgtOWQzYWU2OTZlODFl"), // a9947035-2e97-457f-9898-9d3ae696e81e
+			"pubKeyCredParams":[
+				{ "type":"public-key", "alg":-7 },
+				{ "type":"public-key", "alg":-257 }
+			],
+			"timeout":1800000,
+			"attestation":"none",
+			"excludeCredentials":[],
+			"authenticationSelection":{
+				"authenticatorAttachment":"platform",
+				"userVerification":"required",
+				"requireResidentKey":true
+			}
+		}
+	});
+	const credential={};
+	credential.id=cred.id;
+	credential.type=cred.type;
+	if(cred.response) {
+		credential.response={
+			"clientDataJSON":encodeBase64(cred.response.clientDataJSON),
+			"attestationObject":encodeBase64(cred.response.attestationObject),
+			"authenticatorData":encodeBase64(cred.response.authenticatorData),
+			"signature":encodeBase64(cred.response.signature),
+			"userHandle":encodeBase64(cred.response.userHandle)
+		};
+	}
+	document.body.appendChild(document.createTextNode(JSON.stringify(cred)));
+	document.body.appendChild(document.createTextNode(JSON.stringify(credential)));
+/*
+	cred.rawId=base64url.encode(cred.rawId);
+	if(cred.response) {
+		cred.response.clientDataJSON=base64url.encode(cred.response.clientDataJSON);
+		cred.response.attestationObject=base64url.encode(cred.response.attestationObject);
+	}
+	console.log(cred);
+	alert(JSON.stringify(cred));
+	document.body.appendChild(document.createTextNode(JSON.stringify(cred)));
+	localStorage.setItem("credId", credential.id);
+*/
+} catch(e) {
+	alert(e);
+}
+}
+
+window.onload=async function(event) {
+	await registerCredentials();
+};
+</script>
+</head>
+<body>
+</body>
+</html>
