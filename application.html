@@ -11,13 +11,13 @@ function decodeBase64(input) {
 	return result.buffer;
 }
 
-function encodeBase64(input) {
-	if(input===undefined)
+function encodeBase64(array) {
+	if(array===undefined)
 		return undefined;
-	input=new Uint8Array(input);
+	const view=new Uint8Array(input);
 	let encoded="";
-	for(let i=0; i<input.length; i+=1)
-		encoded+=String.fromCharCode(input[i]);
+	for(let i=0; i<view.length; i+=1)
+		encoded+=String.fromCharCode(view[i]);
 	return window.btoa(encoded);
 }
 
