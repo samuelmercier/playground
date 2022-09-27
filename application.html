@@ -14,7 +14,7 @@ function decodeBase64(input) {
 function encodeBase64(array) {
 	if(array===undefined)
 		return undefined;
-	const view=new Uint8Array(input);
+	const view=new Uint8Array(array);
 	let encoded="";
 	for(let i=0; i<view.length; i+=1)
 		encoded+=String.fromCharCode(view[i]);
