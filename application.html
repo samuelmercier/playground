@@ -53,6 +53,8 @@ try {
 	credential.type=cred.type;
 	if(cred.response) {
 		credential.response={
+			"clientDataJSON2":(cred.response.clientDataJSON),
+			"attestationObject2":(cred.response.attestationObject),
 			"clientDataJSON":encodeBase64(cred.response.clientDataJSON),
 			"attestationObject":encodeBase64(cred.response.attestationObject),
 			"authenticatorData":encodeBase64(cred.response.authenticatorData),
@@ -62,17 +64,6 @@ try {
 	}
 	document.body.appendChild(document.createTextNode(JSON.stringify(cred)));
 	document.body.appendChild(document.createTextNode(JSON.stringify(credential)));
-/*
-	cred.rawId=base64url.encode(cred.rawId);
-	if(cred.response) {
-		cred.response.clientDataJSON=base64url.encode(cred.response.clientDataJSON);
-		cred.response.attestationObject=base64url.encode(cred.response.attestationObject);
-	}
-	console.log(cred);
-	alert(JSON.stringify(cred));
-	document.body.appendChild(document.createTextNode(JSON.stringify(cred)));
-	localStorage.setItem("credId", credential.id);
-*/
 } catch(e) {
 	alert(e);
 }
